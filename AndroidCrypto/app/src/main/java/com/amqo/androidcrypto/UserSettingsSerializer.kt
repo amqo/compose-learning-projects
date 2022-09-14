@@ -6,7 +6,9 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-class UserSettingsSerializer(private val cryptoManager: CryptoManager): Serializer<UserSettings> {
+class UserSettingsSerializer(
+    private val cryptoManager: CryptoManager
+) : Serializer<UserSettings> {
 
     override val defaultValue: UserSettings
         get() = UserSettings()

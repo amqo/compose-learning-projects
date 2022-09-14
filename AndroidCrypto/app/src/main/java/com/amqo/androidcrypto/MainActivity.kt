@@ -1,74 +1,86 @@
 package com.amqo.androidcrypto
 
+import android.content.Context
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.datastore.dataStore
 import com.amqo.androidcrypto.ui.theme.AndroidCryptoTheme
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.InputStreamReader
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    private val Context.dataStore by dataStore(
+        fileName = "user-settings.json",
+        serializer = UserSettingsSerializer(CryptoManager()),
+        corruptionHandler = null
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val cryptoManager = CryptoManager()
         setContent {
             AndroidCryptoTheme {
-                var messageToEncrypt by remember {
-                    mutableStateOf("")
-                }
-                var messageToDecrypt by remember {
-                    mutableStateOf("")
-                }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(32.dp)
+                var username by remember {
+                    mutableStateOf("")
+                }
+                var password by remember {
+                    mutableStateOf("")
+                }
+                var userSettings by remember {
+                    mutableStateOf(UserSettings())
+                }
+                val scope = rememberCoroutineScope()
+
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(32.dp)
                 ) {
                     TextField(
-                        value = messageToEncrypt,
-                        onValueChange = {
-                            messageToEncrypt = it
-                        },
+                        value = username,
+                        onValueChange = { username = it },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("Encrypt message") }
+                        placeholder = { Text("Username") }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Password") }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Row {
                         Button(onClick = {
-                            val bytes = messageToEncrypt.encodeToByteArray()
-                            val file = File(filesDir, "secret.txt")
-                            if (!file.exists()) file.createNewFile()
-                            val fos = FileOutputStream(file)
-
-                            messageToDecrypt = cryptoManager.encrypt(
-                                bytes,
-                                fos
-                            ).decodeToString()
+                            scope.launch {
+                                dataStore.updateData {
+                                    UserSettings(
+                                        username = username,
+                                        password = password
+                                    )
+                                }
+                            }
                         }) {
-                            Text("Encrypt")
+                            Text(text = "Save")
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Button(onClick = {
-                            val file = File(filesDir, "secret.txt")
-                            messageToEncrypt = cryptoManager.decrypt(
-                                file.inputStream()
-                            ).decodeToString()
+                            scope.launch {
+                                userSettings = dataStore.data.first()
+                            }
                         }) {
-                            Text("Decrypt")
+                            Text(text = "Load")
                         }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(messageToDecrypt)
+                    Text(text = userSettings.toString())
                 }
             }
         }
