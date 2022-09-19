@@ -5,10 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
 import com.plcoding.weatherapp.domain.location.repository.LocationTracker
 import com.plcoding.weatherapp.domain.util.Resource
 import com.plcoding.weatherapp.domain.weather.repository.WeatherRepository
-import com.plcoding.weatherapp.presentation.model.ConnectivityStatus
+import com.plcoding.weatherapp.domain.connectivity.model.ConnectivityStatus
 import com.plcoding.weatherapp.presentation.model.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

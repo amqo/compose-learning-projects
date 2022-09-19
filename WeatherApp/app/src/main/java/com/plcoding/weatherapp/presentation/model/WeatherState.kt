@@ -1,5 +1,6 @@
 package com.plcoding.weatherapp.presentation.model
 
+import com.plcoding.weatherapp.domain.connectivity.model.ConnectivityStatus
 import com.plcoding.weatherapp.domain.weather.model.WeatherInfo
 
 data class WeatherState(

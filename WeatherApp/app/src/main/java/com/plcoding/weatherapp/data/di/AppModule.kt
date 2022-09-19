@@ -4,8 +4,8 @@ import android.app.Application
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.plcoding.weatherapp.data.weather.repository.remote.WeatherApi
-import com.plcoding.weatherapp.presentation.ConnectivityObserver
-import com.plcoding.weatherapp.presentation.NetworkConnectivityObserver
+import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
+import com.plcoding.weatherapp.data.connectivity.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

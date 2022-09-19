@@ -1,9 +1,10 @@
-package com.plcoding.weatherapp.presentation
+package com.plcoding.weatherapp.data.connectivity
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import com.plcoding.weatherapp.presentation.model.ConnectivityStatus
+import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
+import com.plcoding.weatherapp.domain.connectivity.model.ConnectivityStatus
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NetworkConnectivityObserver(
-    private val context: Context
+    context: Context
 ): ConnectivityObserver {
 
     private val connectivityManager =
