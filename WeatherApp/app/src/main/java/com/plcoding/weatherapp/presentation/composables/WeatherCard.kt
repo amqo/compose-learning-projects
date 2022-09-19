@@ -38,13 +38,26 @@ fun WeatherCard(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Today ${
-                        data.time.format(DateTimeFormatter.ofPattern("HH:mm"))
-                    }",
-                    modifier = Modifier.align(Alignment.End),
-                    color = Color.White
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Today ${
+                            data.time.format(DateTimeFormatter.ofPattern("HH:mm"))
+                        }",
+                        color = Color.White
+                    )
+                    if (state.lightValue >= 0) {
+                        WeatherDataDisplay(
+                            value = state.lightValue,
+                            unit = " Ambient",
+                            icon = ImageVector.vectorResource(id = R.drawable.ic_light),
+                            iconTint = Color.White,
+                            textStyle = TextStyle(color = Color.White)
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Image(
                     painter = painterResource(id = data.weatherType.iconRes),

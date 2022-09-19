@@ -6,6 +6,11 @@ import com.google.android.gms.location.LocationServices
 import com.plcoding.weatherapp.data.weather.repository.remote.WeatherApi
 import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
 import com.plcoding.weatherapp.data.connectivity.NetworkConnectivityObserver
+import com.plcoding.weatherapp.data.sensors.HumiditySensor
+import com.plcoding.weatherapp.data.sensors.LightSensor
+import com.plcoding.weatherapp.data.sensors.TemperatureSensor
+import com.plcoding.weatherapp.domain.sensors.MeasurableSensor
+import com.plcoding.weatherapp.domain.sensors.MeasurableSensorList
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,5 +48,19 @@ object AppModule {
         app: Application
     ): ConnectivityObserver {
         return NetworkConnectivityObserver(app)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSensors(
+        app: Application
+    ): MeasurableSensorList {
+        return MeasurableSensorList(
+            sensors = listOf(
+                TemperatureSensor(app),
+                HumiditySensor(app),
+                LightSensor(app)
+            )
+        )
     }
 }

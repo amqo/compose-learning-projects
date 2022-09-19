@@ -7,5 +7,6 @@ data class WeatherState(
     val weatherInfo: WeatherInfo? = null,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val connectivityStatus: ConnectivityStatus = ConnectivityStatus.Unavailable
+    val connectivityStatus: ConnectivityStatus = ConnectivityStatus.Unavailable,
+    val lightValue: Int = -1
 )
