@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.plcoding.weatherapp.presentation.model.ConnectivityStatus
 import com.plcoding.weatherapp.presentation.ui.theme.DarkBlue
 import com.plcoding.weatherapp.presentation.ui.theme.DeepBlue
 import com.plcoding.weatherapp.presentation.ui.theme.WeatherAppTheme
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) {
-            viewModel.loadWeatherInfo()
+            viewModel.init()
         }
         permissionLauncher.launch(arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -50,26 +51,37 @@ class MainActivity : ComponentActivity() {
                             .background(DarkBlue)
                     ) {
                         WeatherCard(
-                            state = viewModel.state,
+                            state = viewModel.weatherState,
                             backgroundColor = DeepBlue
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         WeatherForecast(
-                            state = viewModel.state
+                            state = viewModel.weatherState
                         )
                     }
-                    if (viewModel.state.isLoading) {
+
+                    if (viewModel.weatherState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                    viewModel.state.error?.let { error ->
+                    val connectivityStatus = viewModel.weatherState.connectivityStatus
+                    if (connectivityStatus != ConnectivityStatus.Available) {
                         Text(
-                            text = error,
+                            text = "Network status: $connectivityStatus",
                             color = Color.Red,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.align(Alignment.Center)
                         )
+                    } else {
+                        viewModel.weatherState.error?.let { error ->
+                            Text(
+                                text = error,
+                                color = Color.Red,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
                     }
                 }
             }

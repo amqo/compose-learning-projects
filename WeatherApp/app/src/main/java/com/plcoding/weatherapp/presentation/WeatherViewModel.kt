@@ -8,22 +8,44 @@ import androidx.lifecycle.viewModelScope
 import com.plcoding.weatherapp.domain.location.repository.LocationTracker
 import com.plcoding.weatherapp.domain.util.Resource
 import com.plcoding.weatherapp.domain.weather.repository.WeatherRepository
+import com.plcoding.weatherapp.presentation.model.ConnectivityStatus
+import com.plcoding.weatherapp.presentation.model.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val locationTracker: LocationTracker,
-    private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val connectivityObserver: ConnectivityObserver
 ): ViewModel() {
 
-    var state by mutableStateOf(WeatherState())
+    var weatherState by mutableStateOf(WeatherState())
         private set
 
-    fun loadWeatherInfo() {
+    fun init() {
+        connectivityObserver.observe().onEach { status ->
+            if (status == ConnectivityStatus.Available) {
+                weatherState = weatherState.copy(
+                    connectivityStatus = status
+                )
+                loadWeatherInfo()
+            } else {
+                weatherState = weatherState.copy(
+                    weatherInfo = null,
+                    isLoading = false,
+                    connectivityStatus = status
+                )
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun loadWeatherInfo() {
         viewModelScope.launch {
-            state = state.copy(
+            weatherState = weatherState.copy(
                 isLoading = true,
                 error = null
             )
@@ -32,16 +54,16 @@ class WeatherViewModel @Inject constructor(
                     location.latitude,
                     location.longitude
                 )
-                state = when(weatherResource) {
+                weatherState = when(weatherResource) {
                     is Resource.Success -> {
-                        state.copy(
+                        weatherState.copy(
                             weatherInfo = weatherResource.data,
                             isLoading = false,
                             error = null
                         )
                     }
                     is Resource.Error -> {
-                        state.copy(
+                        weatherState.copy(
                             weatherInfo = null,
                             isLoading = false,
                             error = weatherResource.message
@@ -49,7 +71,7 @@ class WeatherViewModel @Inject constructor(
                     }
                 }
             } ?: kotlin.run {
-                state = state.copy(
+                weatherState = weatherState.copy(
                     isLoading = false,
                     error = "Couldn't retrieve location"
                 )
