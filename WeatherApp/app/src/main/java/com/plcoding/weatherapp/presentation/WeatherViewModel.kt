@@ -57,7 +57,7 @@ class WeatherViewModel @Inject constructor(
         val light = values[0]
         Log.d(TAG, "onLightSensorValues $light")
         _weatherStateFlow.update {
-            _weatherStateFlow.value.copy(
+            it.copy(
                 lightValue = light.roundToInt()
             )
         }
@@ -67,14 +67,14 @@ class WeatherViewModel @Inject constructor(
         connectivityObserver.observe().onEach { status ->
             if (status == ConnectivityStatus.Available) {
                 _weatherStateFlow.update {
-                    _weatherStateFlow.value.copy(
+                    it.copy(
                         connectivityStatus = status
                     )
                 }
                 loadWeatherInfo()
             } else {
                 _weatherStateFlow.update {
-                    _weatherStateFlow.value.copy(
+                    it.copy(
                         weatherInfo = null,
                         isLoading = false,
                         connectivityStatus = status
@@ -100,14 +100,14 @@ class WeatherViewModel @Inject constructor(
                 _weatherStateFlow.update {
                     when (weatherResource) {
                         is Resource.Success -> {
-                            _weatherStateFlow.value.copy(
+                            it.copy(
                                 weatherInfo = weatherResource.data,
                                 isLoading = false,
                                 error = null
                             )
                         }
                         is Resource.Error -> {
-                            _weatherStateFlow.value.copy(
+                            it.copy(
                                 weatherInfo = null,
                                 isLoading = false,
                                 error = weatherResource.message
