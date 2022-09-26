@@ -12,10 +12,7 @@ import com.plcoding.weatherapp.domain.util.Resource
 import com.plcoding.weatherapp.domain.weather.repository.WeatherRepository
 import com.plcoding.weatherapp.presentation.model.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -59,61 +56,72 @@ class WeatherViewModel @Inject constructor(
     private fun onLightSensorValues(values: List<Float>) {
         val light = values[0]
         Log.d(TAG, "onLightSensorValues $light")
-        _weatherStateFlow.value = _weatherStateFlow.value.copy(
-            lightValue = light.roundToInt()
-        )
+        _weatherStateFlow.update {
+            _weatherStateFlow.value.copy(
+                lightValue = light.roundToInt()
+            )
+        }
     }
 
     fun loadInfo() {
         connectivityObserver.observe().onEach { status ->
             if (status == ConnectivityStatus.Available) {
-
-                _weatherStateFlow.value = _weatherStateFlow.value.copy(
-                    connectivityStatus = status
-                )
+                _weatherStateFlow.update {
+                    _weatherStateFlow.value.copy(
+                        connectivityStatus = status
+                    )
+                }
                 loadWeatherInfo()
             } else {
-                _weatherStateFlow.value = _weatherStateFlow.value.copy(
-                    weatherInfo = null,
-                    isLoading = false,
-                    connectivityStatus = status
-                )
+                _weatherStateFlow.update {
+                    _weatherStateFlow.value.copy(
+                        weatherInfo = null,
+                        isLoading = false,
+                        connectivityStatus = status
+                    )
+                }
             }
         }.launchIn(viewModelScope)
     }
 
     private fun loadWeatherInfo() {
         viewModelScope.launch {
-            _weatherStateFlow.value = _weatherStateFlow.value.copy(
-                isLoading = true,
-                error = null
-            )
+            _weatherStateFlow.update {
+                weatherStateFlow.value.copy(
+                    isLoading = true,
+                    error = null
+                )
+            }
             locationTracker.getCurrentLocation()?.let { location ->
                 val weatherResource = weatherRepository.getWeatherInfo(
                     location.latitude,
                     location.longitude
                 )
-                _weatherStateFlow.value = when(weatherResource) {
-                    is Resource.Success -> {
-                        _weatherStateFlow.value.copy(
-                            weatherInfo = weatherResource.data,
-                            isLoading = false,
-                            error = null
-                        )
-                    }
-                    is Resource.Error -> {
-                        _weatherStateFlow.value.copy(
-                            weatherInfo = null,
-                            isLoading = false,
-                            error = weatherResource.message
-                        )
+                _weatherStateFlow.update {
+                    when (weatherResource) {
+                        is Resource.Success -> {
+                            _weatherStateFlow.value.copy(
+                                weatherInfo = weatherResource.data,
+                                isLoading = false,
+                                error = null
+                            )
+                        }
+                        is Resource.Error -> {
+                            _weatherStateFlow.value.copy(
+                                weatherInfo = null,
+                                isLoading = false,
+                                error = weatherResource.message
+                            )
+                        }
                     }
                 }
             } ?: kotlin.run {
-                _weatherStateFlow.value = _weatherStateFlow.value.copy(
-                    isLoading = false,
-                    error = "Couldn't retrieve location"
-                )
+                _weatherStateFlow.update {
+                    weatherStateFlow.value.copy(
+                        isLoading = false,
+                        error = "Couldn't retrieve location"
+                    )
+                }
             }
         }
     }
