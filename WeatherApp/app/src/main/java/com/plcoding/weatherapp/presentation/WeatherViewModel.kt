@@ -87,7 +87,7 @@ class WeatherViewModel @Inject constructor(
     private fun loadWeatherInfo() {
         viewModelScope.launch {
             _weatherStateFlow.update {
-                weatherStateFlow.value.copy(
+                it.copy(
                     isLoading = true,
                     error = null
                 )
@@ -117,7 +117,7 @@ class WeatherViewModel @Inject constructor(
                 }
             } ?: kotlin.run {
                 _weatherStateFlow.update {
-                    weatherStateFlow.value.copy(
+                    it.copy(
                         isLoading = false,
                         error = "Couldn't retrieve location"
                     )
