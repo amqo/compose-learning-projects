@@ -1,9 +1,6 @@
 package com.plcoding.weatherapp.presentation
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
@@ -15,6 +12,8 @@ import com.plcoding.weatherapp.domain.util.Resource
 import com.plcoding.weatherapp.domain.weather.repository.WeatherRepository
 import com.plcoding.weatherapp.presentation.model.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -29,12 +28,12 @@ class WeatherViewModel @Inject constructor(
     sensorList: MeasurableSensorList
 ): ViewModel() {
 
-    var weatherState by mutableStateOf(WeatherState())
-        private set
+    private val _weatherStateFlow = MutableStateFlow(WeatherState())
+    val weatherStateFlow = _weatherStateFlow.asStateFlow()
 
     init {
         sensorList.sensors.forEach { sensor ->
-            Log.d("AMQO", "Start listening sensor: " + sensor.sensorType)
+            Log.d(TAG, "Start listening sensor: " + sensor.sensorType)
             sensor.startListening()
             sensor.setOnSensorValuesChangedListener { values ->
                 when(sensor.sensorType) {
@@ -60,7 +59,7 @@ class WeatherViewModel @Inject constructor(
     private fun onLightSensorValues(values: List<Float>) {
         val light = values[0]
         Log.d(TAG, "onLightSensorValues $light")
-        weatherState = weatherState.copy(
+        _weatherStateFlow.value = _weatherStateFlow.value.copy(
             lightValue = light.roundToInt()
         )
     }
@@ -68,12 +67,13 @@ class WeatherViewModel @Inject constructor(
     fun loadInfo() {
         connectivityObserver.observe().onEach { status ->
             if (status == ConnectivityStatus.Available) {
-                weatherState = weatherState.copy(
+
+                _weatherStateFlow.value = _weatherStateFlow.value.copy(
                     connectivityStatus = status
                 )
                 loadWeatherInfo()
             } else {
-                weatherState = weatherState.copy(
+                _weatherStateFlow.value = _weatherStateFlow.value.copy(
                     weatherInfo = null,
                     isLoading = false,
                     connectivityStatus = status
@@ -84,7 +84,7 @@ class WeatherViewModel @Inject constructor(
 
     private fun loadWeatherInfo() {
         viewModelScope.launch {
-            weatherState = weatherState.copy(
+            _weatherStateFlow.value = _weatherStateFlow.value.copy(
                 isLoading = true,
                 error = null
             )
@@ -93,16 +93,16 @@ class WeatherViewModel @Inject constructor(
                     location.latitude,
                     location.longitude
                 )
-                weatherState = when(weatherResource) {
+                _weatherStateFlow.value = when(weatherResource) {
                     is Resource.Success -> {
-                        weatherState.copy(
+                        _weatherStateFlow.value.copy(
                             weatherInfo = weatherResource.data,
                             isLoading = false,
                             error = null
                         )
                     }
                     is Resource.Error -> {
-                        weatherState.copy(
+                        _weatherStateFlow.value.copy(
                             weatherInfo = null,
                             isLoading = false,
                             error = weatherResource.message
@@ -110,7 +110,7 @@ class WeatherViewModel @Inject constructor(
                     }
                 }
             } ?: kotlin.run {
-                weatherState = weatherState.copy(
+                _weatherStateFlow.value = _weatherStateFlow.value.copy(
                     isLoading = false,
                     error = "Couldn't retrieve location"
                 )

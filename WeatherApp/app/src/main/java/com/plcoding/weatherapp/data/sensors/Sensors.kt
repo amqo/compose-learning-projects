@@ -3,7 +3,6 @@ package com.plcoding.weatherapp.data.sensors
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Sensor
-import com.plcoding.weatherapp.domain.sensors.MeasurableSensor
 
 data class TemperatureSensor(
     private val context: Context

@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
         ))
         setContent {
             WeatherAppTheme {
+                val weatherState = viewModel.weatherStateFlow.collectAsState()
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -51,21 +53,21 @@ class MainActivity : ComponentActivity() {
                             .background(DarkBlue)
                     ) {
                         WeatherCard(
-                            state = viewModel.weatherState,
+                            state = weatherState.value,
                             backgroundColor = DeepBlue
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         WeatherForecast(
-                            state = viewModel.weatherState
+                            state = weatherState.value
                         )
                     }
 
-                    if (viewModel.weatherState.isLoading) {
+                    if (weatherState.value.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-                    val connectivityStatus = viewModel.weatherState.connectivityStatus
+                    val connectivityStatus = weatherState.value.connectivityStatus
                     if (connectivityStatus != ConnectivityStatus.Available) {
                         Text(
                             text = "Network status: $connectivityStatus",
@@ -74,7 +76,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.align(Alignment.Center)
                         )
                     } else {
-                        viewModel.weatherState.error?.let { error ->
+                        weatherState.value.error?.let { error ->
                             Text(
                                 text = error,
                                 color = Color.Red,

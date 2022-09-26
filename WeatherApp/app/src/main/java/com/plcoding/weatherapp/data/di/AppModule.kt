@@ -3,13 +3,12 @@ package com.plcoding.weatherapp.data.di
 import android.app.Application
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.plcoding.weatherapp.data.weather.repository.remote.WeatherApi
-import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
 import com.plcoding.weatherapp.data.connectivity.NetworkConnectivityObserver
 import com.plcoding.weatherapp.data.sensors.HumiditySensor
 import com.plcoding.weatherapp.data.sensors.LightSensor
 import com.plcoding.weatherapp.data.sensors.TemperatureSensor
-import com.plcoding.weatherapp.domain.sensors.MeasurableSensor
+import com.plcoding.weatherapp.data.weather.repository.remote.WeatherApi
+import com.plcoding.weatherapp.domain.connectivity.ConnectivityObserver
 import com.plcoding.weatherapp.domain.sensors.MeasurableSensorList
 import dagger.Module
 import dagger.Provides
