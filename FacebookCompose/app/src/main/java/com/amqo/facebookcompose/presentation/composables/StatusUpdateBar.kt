@@ -6,9 +6,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.VideoCall
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +38,11 @@ fun StatusUpdateBar(
 
 @Composable
 private fun StatusActionButtons() {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+    ) {
         StatusActionButton(
             modifier = Modifier.weight(1f),
             icon = Icons.Default.VideoCall,
@@ -49,17 +51,19 @@ private fun StatusActionButtons() {
                 // TODO
             }
         )
+        VerticalDivider()
         StatusActionButton(
             modifier = Modifier.weight(1f),
-            icon = Icons.Default.Photo,
+            icon = Icons.Default.PhotoAlbum,
             text = stringResource(R.string.photo_status_button),
             onClick = {
                 // TODO
             }
         )
+        VerticalDivider()
         StatusActionButton(
             modifier = Modifier.weight(1f),
-            icon = Icons.Default.Chat,
+            icon = Icons.Default.ChatBubble,
             text = stringResource(R.string.discuss_status_button),
             onClick = {
                 // TODO
