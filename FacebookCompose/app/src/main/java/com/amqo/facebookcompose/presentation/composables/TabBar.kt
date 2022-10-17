@@ -27,12 +27,12 @@ fun TabBar() {
             contentColor = MaterialTheme.colors.primary
         ) {
             val tabs = listOf(
-                TabItem(icon = Icons.Default.Home, contentDescription = "Tab icon ${Icons.Default.Home.name}"),
-                TabItem(icon = Icons.Default.Tv, contentDescription = "Tab icon ${Icons.Default.Tv.name}"),
-                TabItem(icon = Icons.Default.Store, contentDescription = "Tab icon ${Icons.Default.Store.name}"),
-                TabItem(icon = Icons.Default.Newspaper, contentDescription = "Tab icon ${Icons.Default.Newspaper.name}"),
-                TabItem(icon = Icons.Default.Notifications, contentDescription = "Tab icon ${Icons.Default.Notifications.name}"),
-                TabItem(icon = Icons.Default.Menu, contentDescription = "Tab icon ${Icons.Default.Menu.name}")
+                TabItem(icon = Icons.Default.Home, contentDescription = Icons.Default.Home.name),
+                TabItem(icon = Icons.Default.Tv, contentDescription = Icons.Default.Tv.name),
+                TabItem(icon = Icons.Default.Store, contentDescription = Icons.Default.Store.name),
+                TabItem(icon = Icons.Default.Newspaper, contentDescription = Icons.Default.Newspaper.name),
+                TabItem(icon = Icons.Default.Notifications, contentDescription = Icons.Default.Notifications.name),
+                TabItem(icon = Icons.Default.Menu, contentDescription = Icons.Default.Menu.name)
             )
             tabs.forEachIndexed { i, tabItem ->
                 TabIconButton(

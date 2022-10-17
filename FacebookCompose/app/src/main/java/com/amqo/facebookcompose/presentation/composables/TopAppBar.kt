@@ -1,6 +1,5 @@
 package com.amqo.facebookcompose.presentation.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,7 +19,6 @@ import com.amqo.facebookcompose.ui.theme.ButtonGray
 
 @Composable
 fun TopAppBar() {
-    val logTag = "TopAppBar"
     Surface {
         Row(
             Modifier
@@ -34,11 +32,11 @@ fun TopAppBar() {
             )
             Spacer(Modifier.weight(1f))
             TopBarButton(onClick = {
-                Log.d(logTag, "Search button clicked")
+
             }, icon = Icons.Rounded.Search)
             Spacer(Modifier.width(8.dp))
             TopBarButton(onClick = {
-                Log.d(logTag, "Chat button clicked")
+
             }, icon = Icons.Rounded.ChatBubble)
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -56,6 +54,6 @@ private fun TopBarButton(
             .clip(CircleShape)
             .background(ButtonGray)
     ) {
-        Icon(imageVector = icon, contentDescription = "${icon.name} button")
+        Icon(imageVector = icon, contentDescription = icon.name)
     }
 }
