@@ -2,4 +2,7 @@
     <string name="app_name">Facebook Compose</string>
     <string name="what_is_on_your_mind">What\'s on your mind?</string>
     <string name="profile_image">Profile image</string>
+    <string name="live_status_button">Live</string>
+    <string name="photo_status_button">Photo</string>
+    <string name="discuss_status_button">Discuss</string>
 </resources>
