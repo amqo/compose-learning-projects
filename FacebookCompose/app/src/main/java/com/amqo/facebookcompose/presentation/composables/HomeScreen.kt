@@ -1,0 +1,49 @@
+package com.amqo.facebookcompose.presentation.composables
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.amqo.facebookcompose.ui.theme.FacebookComposeTheme
+
+@Composable
+fun HomeScreen() {
+    Box(
+        Modifier
+            .background(MaterialTheme.colors.background)
+            .fillMaxSize()
+    ) {
+        LazyColumn {
+            item {
+                TopAppBar()
+            }
+            item {
+                TabBar()
+            }
+            item {
+                StatusUpdateBar()
+            }
+        }
+    }
+}
+
+@Composable
+fun StatusUpdateBar() {
+    Surface {
+        Text("Status update bar TODO")
+    }
+}
+
+@Preview(widthDp = 400, heightDp = 300)
+@Composable
+fun HomeScreenPreview() {
+    FacebookComposeTheme {
+        HomeScreen()
+    }
+}

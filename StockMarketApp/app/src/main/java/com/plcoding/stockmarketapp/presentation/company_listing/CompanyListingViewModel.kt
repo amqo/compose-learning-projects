@@ -18,6 +18,7 @@ class CompanyListingViewModel @Inject constructor(
     private val repository: StockRepository
 ): ViewModel() {
 
+    // TODO avoid having the compose dependency in view model, use StateFlow instead, then .collectAsState in composable
     var state by mutableStateOf(CompanyListingState())
 
     private var searchJob: Job? = null

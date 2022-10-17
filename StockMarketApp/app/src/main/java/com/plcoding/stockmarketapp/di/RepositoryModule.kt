@@ -6,7 +6,7 @@ import com.plcoding.stockmarketapp.data.csv.IntradayInfoParser
 import com.plcoding.stockmarketapp.domain.model.CompanyListing
 import com.plcoding.stockmarketapp.domain.model.IntradayInfo
 import com.plcoding.stockmarketapp.domain.repository.StockRepository
-import com.plcoding.stockmarketapp.domain.repository.StockRepositoryImpl
+import com.plcoding.stockmarketapp.data.repository.StockRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
