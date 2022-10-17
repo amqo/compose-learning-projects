@@ -32,11 +32,11 @@ fun TopAppBar() {
             )
             Spacer(Modifier.weight(1f))
             TopBarButton(onClick = {
-
+                // TODO
             }, icon = Icons.Rounded.Search)
             Spacer(Modifier.width(8.dp))
             TopBarButton(onClick = {
-
+                // TODO
             }, icon = Icons.Rounded.ChatBubble)
         }
         Spacer(modifier = Modifier.height(8.dp))

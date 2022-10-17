@@ -4,15 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -36,7 +38,13 @@ fun HomeScreen() {
             }
             item {
                 StatusUpdateBar(
-                    avatarUrl = "https://static.jobscan.co/blog/uploads/hickman-testimonial-1.png"
+                    avatarUrl = "https://static.jobscan.co/blog/uploads/hickman-testimonial-1.png",
+                    onTextChange = {
+                        // TODO
+                    },
+                    onSendAction = {
+                        // TODO
+                    }
                 )
             }
         }
@@ -45,7 +53,9 @@ fun HomeScreen() {
 
 @Composable
 fun StatusUpdateBar(
-    avatarUrl: String
+    avatarUrl: String,
+    onTextChange: (String) -> Unit,
+    onSendAction: () -> Unit
 ) {
     Surface {
         Row(
@@ -68,12 +78,29 @@ fun StatusUpdateBar(
                     .size(40.dp)
                     .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                stringResource(R.string.what_is_on_your_mind),
-                color = MaterialTheme.colors.onSurface.copy(
-                    alpha = .55f
-                )
+            var text by remember {
+                mutableStateOf("")
+            }
+            TextField(
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                value = text,
+                singleLine = true,
+                onValueChange = {
+                    text = it
+                    onTextChange(it)
+                },
+                placeholder = {
+                    Text(text = stringResource(id = R.string.what_is_on_your_mind))
+                },
+                keyboardActions = KeyboardActions(
+                    onSend = { onSendAction() }
+                ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send)
             )
         }
     }
