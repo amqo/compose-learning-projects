@@ -34,7 +34,11 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("signin") {
                         SignInScreen {
-                            navController.navigate("home")
+                            navController.navigate("home") {
+                                popUpTo("signin") {
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
                 }

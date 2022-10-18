@@ -5,4 +5,7 @@
     <string name="live_status_button">Live</string>
     <string name="photo_status_button">Photo</string>
     <string name="discuss_status_button">Discuss</string>
+
+    <string name="sign_in_cancel">Sign In was cancelled</string>
+    <string name="sign_in_success">Logged In successfully!</string>
 </resources>

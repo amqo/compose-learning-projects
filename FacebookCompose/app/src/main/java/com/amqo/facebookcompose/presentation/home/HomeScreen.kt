@@ -23,9 +23,9 @@ import com.amqo.facebookcompose.ui.theme.FacebookComposeTheme
 fun HomeScreen(
     onSignInRequired: () -> Unit
 ) {
-
     val viewModel = viewModel<HomeViewModel>()
     val state by viewModel.state.collectAsState()
+
     when (state) {
         is HomeScreenState.Loaded -> HomeScreenContent(state as HomeScreenState.Loaded)
         is HomeScreenState.Loading -> LoadingScreen()

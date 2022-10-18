@@ -28,7 +28,7 @@ fun TopAppBar() {
         ) {
             Text(
                 stringResource(id = R.string.app_name).lowercase(),
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.h6,
             )
             Spacer(Modifier.weight(1f))
             TopBarButton(onClick = {
