@@ -1,4 +1,4 @@
-package com.amqo.facebookcompose.presentation.composables
+package com.amqo.facebookcompose.presentation.home.composable
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -6,7 +6,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.PhotoAlbum
+import androidx.compose.material.icons.filled.VideoCall
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -111,45 +114,61 @@ private fun StatusUpdateHeader(
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(avatarUrl)
-                .crossfade(true)
-                .placeholder(R.drawable.ic_placeholder)
-                .build(),
-            contentDescription = stringResource(R.string.profile_image),
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-        )
-        var text by remember {
-            mutableStateOf("")
-        }
-        TextField(
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            value = text,
-            singleLine = true,
-            onValueChange = {
-                text = it
-                onTextChange(it)
-            },
-            placeholder = {
-                Text(text = stringResource(id = R.string.what_is_on_your_mind))
-            },
-            keyboardActions = KeyboardActions(
-                onSend = {
-                    if (text.isNotEmpty()) {
-                        onSendAction()
-                        text = ""
-                    }
-                }
-            ),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send)
-        )
+        ProfileImage(avatarUrl)
+        StatusTextField(onTextChange, onSendAction)
     }
+}
+
+@Composable
+private fun ProfileImage(avatarUrl: String) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(avatarUrl)
+            .crossfade(true)
+            .placeholder(R.drawable.ic_placeholder)
+            .build(),
+        contentDescription = stringResource(R.string.profile_image),
+        modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+    )
+}
+
+@Composable
+private fun StatusTextField(
+    onTextChange: (String) -> Unit,
+    onSendAction: () -> Unit
+) {
+    var text by remember {
+        mutableStateOf("")
+    }
+    val focusManager = LocalFocusManager.current
+
+    TextField(
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        modifier = Modifier.fillMaxWidth(),
+        value = text,
+        singleLine = true,
+        onValueChange = {
+            text = it
+            onTextChange(it)
+        },
+        placeholder = {
+            Text(text = stringResource(id = R.string.what_is_on_your_mind))
+        },
+        keyboardActions = KeyboardActions(
+            onSend = {
+                if (text.isNotEmpty()) {
+                    onSendAction()
+                    focusManager.clearFocus(true)
+                    text = ""
+                }
+            }
+        ),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send)
+    )
 }

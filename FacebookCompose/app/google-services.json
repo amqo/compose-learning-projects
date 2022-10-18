@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "563884070865",
+    "project_id": "facebook-compose-c190e",
+    "storage_bucket": "facebook-compose-c190e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563884070865:android:e202406a4d896d9c3f32f0",
+        "android_client_info": {
+          "package_name": "com.amqo.facebookcompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563884070865-b4pul6rsmvvgo5ij5laaijb46ste6mp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amqo.facebookcompose",
+            "certificate_hash": "f0eca53fef3656c42f57dd6ce386afbc6c211cab"
+          }
+        },
+        {
+          "client_id": "563884070865-k08n7n18g73o2tf6b1ic7d485mik0rmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARNELvjNih6dvRjvjrMkxfP6MGZo50rCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563884070865-k08n7n18g73o2tf6b1ic7d485mik0rmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

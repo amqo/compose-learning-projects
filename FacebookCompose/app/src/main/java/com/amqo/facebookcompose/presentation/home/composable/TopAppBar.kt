@@ -1,4 +1,4 @@
-package com.amqo.facebookcompose.presentation.composables
+package com.amqo.facebookcompose.presentation.home.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

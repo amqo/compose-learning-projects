@@ -1,4 +1,4 @@
-package com.amqo.facebookcompose.presentation.composables
+package com.amqo.facebookcompose.presentation.home.composable
 
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.*
